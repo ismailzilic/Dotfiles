@@ -3,6 +3,10 @@ precmd() { echo; }
 # Auto loads
 ~/dotfiles/.config/hypr/select-config.sh
 
+# Default editor
+export EDITOR=nvim
+export VISUAL="$EDITOR"
+
 # zinit setup
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
@@ -35,9 +39,6 @@ autoload -U compinit && compinit
 
 zinit cdreplay -q
 
-# Load Angular CLI autocompletion.
-source <(ng completion script)
-
 # Shell integration
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
@@ -64,4 +65,5 @@ setopt hist_find_no_dups
 alias ls='ls --color'
 alias c='clear'
 alias v='nvim'
+alias vi='nvim'
 alias reflector='sudo reflector --latest 20 --sort rate --protocol https --save /etc/pacman.d/mirrorlist'

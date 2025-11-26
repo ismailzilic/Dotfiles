@@ -9,8 +9,9 @@
 
   "modules-left": [
     "custom/icon",
-    "temperature",
     "cpu",
+    "battery",
+    "backlight",
     "clock",
   ],
 
@@ -19,11 +20,9 @@
   ],
 
   "modules-right": [
-    "backlight",
     "wireplumber",
     "network",
     "hyprland/language",
-    "battery",
     "tray",
     "idle_inhibitor",
     "custom/power"
@@ -36,14 +35,8 @@
   "cpu": {
     "interval": 10,
     "format": " {usage}%",
-    "max-length": 10
-  },
-
-  "temperature": {
-    "hwmon-path-abs": "/sys/class/hwmon/hwmon4/",
-	"input-filename": "temp2_input",
-	"format": " {temperatureC}°C",
-	"on-click": "psensor"
+    "max-length": 10,
+    "on-click": "psensor"
   },
 
   "custom/icon": {
@@ -105,6 +98,7 @@
     "tooltip-format-wifi": "{essid} ({signalStrength}%)",
     "tooltip-format-ethernet": "{ifname} ",
     "tooltip-format-disconnected": "Disconnected",
+    "on-click": "nmgui"
   },
 
   "battery": {

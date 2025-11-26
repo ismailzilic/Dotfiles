@@ -3,12 +3,14 @@
     follow = keyboard
     width = 350
     height = (0, 100)
+
+    notification_limit = 5
     origin = top-right
     offset = (20, 20)
 
     progress_bar = true
     progress_bar_horizontal_alignment = center
-    progress_bar_max_width = 350
+    progress_bar_max_width = 334
     progress_bar_corner_radius = 3
 
     indicate_hidden = true
