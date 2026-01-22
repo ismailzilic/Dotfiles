@@ -1,6 +1,6 @@
 # Dotfiles
 
-These configuration files are managed with [GNU Stow](https://www.gnu.org/software/stow/) and used on Arch Linux OS.
+These configuration files are managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
 ---
 
