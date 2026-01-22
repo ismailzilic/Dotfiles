@@ -71,4 +71,4 @@ alias reflector='sudo reflector --latest 20 --sort rate --protocol https --save 
 
 # Starship setup & starship theme preset load
 eval "$(starship init zsh)"
-starship preset jetpack -o ~/.config/starship.toml
+starship preset plain-text-symbols -o ~/.config/starship.toml
