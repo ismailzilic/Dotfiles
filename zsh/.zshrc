@@ -1,8 +1,5 @@
 precmd() { echo; }
 
-# Auto loads
-~/dotfiles/.config/hypr/select-config.sh
-
 # Default editor
 export EDITOR=nvim
 export VISUAL="$EDITOR"
@@ -15,11 +12,15 @@ if [ ! -d "$ZINIT_HOME" ]; then
 	git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
 
-source "${ZINIT_HOME}/zinit.zsh"
+if command -v starship >/dev/null 2>&1; then
+	fastfetch
+else
+    echo "Starship is not installed. Starting installation..."
+	echo "If something breaks, refer to the official Starship installation guide!"
+    curl -sS https://starship.rs/install.sh | sh
+fi
 
-# Theme
-eval "$(oh-my-posh init zsh --config $HOME/dotfiles/.config/ohmyposh/config.json)"
-# eval $(oh-my-posh init zsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/catppuccin.omp.json')
+source "${ZINIT_HOME}/zinit.zsh"
 
 # Plugins
 zinit light zsh-users/zsh-syntax-highlighting
@@ -67,3 +68,7 @@ alias c='clear'
 alias v='nvim'
 alias vi='nvim'
 alias reflector='sudo reflector --latest 20 --sort rate --protocol https --save /etc/pacman.d/mirrorlist'
+
+# Starship setup & starship theme preset load
+eval "$(starship init zsh)"
+starship preset jetpack -o ~/.config/starship.toml
