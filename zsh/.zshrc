@@ -12,6 +12,9 @@ if [ ! -d "$ZINIT_HOME" ]; then
 	git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
 
+source "${ZINIT_HOME}/zinit.zsh"
+
+# Starship setup
 if command -v starship >/dev/null 2>&1; then
 	fastfetch
 else
@@ -20,7 +23,8 @@ else
     curl -sS https://starship.rs/install.sh | sh
 fi
 
-source "${ZINIT_HOME}/zinit.zsh"
+# ssh-agent startup
+eval "$(ssh-agent -s)"
 
 # Plugins
 zinit light zsh-users/zsh-syntax-highlighting
