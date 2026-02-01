@@ -11,16 +11,16 @@ As mentioned, you need GNU Stow installed on you system, or alternatively you ca
 1. **Clone the repository**:
 
     ```bash
-    git clone https://github.com/ismailzilic/dotfiles.git ~/dotfiles
+    git clone https://github.com/ismailzilic/Dotfiles.git ~/Dotfiles
 
-    cd ~/dotfiles
+    cd ~/Dotfiles
     ```
 
 2. **Deploy dotfiles**:  
-   From inside the `dotfiles` directory, run:
+   Run in the `Dotfiles` directory:
 
     ```bash
-    stow zsh -t ~/
+    stow zsh -t ~
     stow .config -t ~/.config
     ```
 
