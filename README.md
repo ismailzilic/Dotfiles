@@ -26,5 +26,5 @@ As mentioned, you need GNU Stow installed on you system, or alternatively you ca
 
     This will create symlinks in your home directory:
 
-    `~/.zshrc` → `~/dotfiles/zsh/.zshrc`  
-    `~/.config/...` → `~/dotfiles/.config/...`
+    `~/.zshrc` → `~/Dotfiles/zsh/.zshrc`  
+    `~/.config/...` → `~/Dotfiles/.config/...`
