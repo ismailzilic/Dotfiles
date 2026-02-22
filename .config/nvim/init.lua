@@ -7,21 +7,23 @@ vim.opt.smartindent = true
 vim.opt.signcolumn = "yes"
 
 vim.opt.incsearch = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+
 vim.opt.undofile = true
 vim.opt.cursorcolumn = false
 vim.opt.termguicolors = true
 vim.opt.swapfile = false
 vim.opt.winborder = "rounded"
 
-vim.cmd(":hi statusline guibg=NONE")
-vim.cmd(":colorscheme unokai")
-
 -- Plugins
-vim.pack.add({ { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "master" },
+vim.pack.add({ { src = "https://github.com/rebelot/kanagawa.nvim" },
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "master" },
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = "https://github.com/mason-org/mason.nvim" },
 	{ src = "https://github.com/stevearc/oil.nvim" },
 	{ src = "https://github.com/echasnovski/mini.pick" },
+	{ src = "https://github.com/saghen/blink.cmp",                version = vim.version.range("^1") },
 })
 
 require("mason").setup()
@@ -36,12 +38,36 @@ require("nvim-treesitter").setup({
 	},
 	indent = { enable = true },
 })
+require("blink.cmp").setup({
+	keymap = { preset = "super-tab" },
+	appearance = {
+		nerd_font_variant = "mono",
+		use_nvim_cmp_as_default = true,
+	},
+	sources = {
+		default = { 'lsp', 'path', 'snippets', 'buffer' },
+	},
+	completion = {
+		keyword = { range = 'full' },
+		documentation = { auto_show = true, auto_show_delay_ms = 400 },
+		menu = {
+			auto_show = true,
+			draw = {
+				treesitter = { "lsp" }
+			}
+		}
+	},
+})
 
 -- Nvim treesitter highlighting
 vim.api.nvim_create_autocmd('FileType', {
 	pattern = { '<filetype>' },
 	callback = function() vim.treesitter.start() end,
 })
+
+-- Theming
+vim.cmd(":hi statusline guibg=NONE")
+vim.cmd(":colorscheme kanagawa")
 
 -- Keymaps
 vim.g.mapleader = " "
@@ -60,7 +86,7 @@ vim.keymap.set('n', '<leader>f', ':Pick files<CR>')
 vim.keymap.set('n', '<leader>h', ':Pick help<CR>')
 vim.keymap.set('n', '<leader>e', ':Oil<CR>')
 
--- Auto close characters
+-- Auto closing characters
 vim.keymap.set('i', '(', '()<Left>')
 vim.keymap.set('i', '[', '[]<Left>')
 vim.keymap.set('i', '{', '{}<Left>')
@@ -81,14 +107,3 @@ vim.lsp.config("emmylua_ls", {
 	}
 
 })
-
--- LSP autocompletion
-vim.api.nvim_create_autocmd("LspAttach", {
-	callback = function(args)
-		local client = vim.lsp.get_client_by_id(args.data.client_id)
-		if client ~= nil and client:supports_method("textDocument/completion") then
-			vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
-		end
-	end,
-})
-vim.cmd("set completeopt+=noselect")
