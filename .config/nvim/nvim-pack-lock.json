@@ -91,6 +91,10 @@
       "rev": "4519153e5e461527f4bca45b042fff45c4ec6fb9",
       "src": "https://github.com/BurntSushi/ripgrep"
     },
+    "smear-cursor.nvim": {
+      "rev": "9e9378d6ee34bb3782e0e8c63d9ec8ca618b479b",
+      "src": "https://github.com/sphamba/smear-cursor.nvim"
+    },
     "snacks.nvim": {
       "rev": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e",
       "src": "https://github.com/folke/snacks.nvim"
