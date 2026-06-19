@@ -8,16 +8,15 @@ export EDITOR=nvim
 export VISUAL=nvim
 export TERM="tmux-256color"
 
-export DOTFILES="$HOME/Dotfiles"
-export CODEBASE="$HOME/Codebase"
-export PLUGINS="$HOME/.config/zsh-plugins"
+export DOTFILES="${HOME}/Dotfiles"
+export PROJECTS="${HOME}/Projects"
 
 
 # ----------------------------------------------------------------
 # 			     History
 # ----------------------------------------------------------------
 
-HISTFILE=~/.zsh_history
+HISTFILE=${HOME}/.zsh_history
 HISTSIZE=30000
 SAVEHIST=30000
 HISTDUP=erase
@@ -32,49 +31,60 @@ setopt hist_find_no_dups
 
 
 # ----------------------------------------------------------------
-# 			     Prompt
+# 			      Zinit
 # ----------------------------------------------------------------
 
-PURE_PATH=$DOTFILES/zsh/pure
+# Install Zinit if missing
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}}/zinit/zinit.git"
 
-if [ ! -d "$PURE_PATH" ]; then
-	mkdir "$PURE_PATH"
-	echo "Couldn't find a defined directory for 'Pure Prompt'."
-	echo "Created a new directory for 'Pure Prompt' at: $PURE_PATH"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+
+source "${ZINIT_HOME}/zinit.zsh"
+
+autoload -Uz compinit && compinit
+
+# Load plugins
+if [[ $+commands[fzf] ]]; then
+	eval "$(fzf --zsh)"
 fi
 
-fpath+=($PURE_PATH)
+if [[ $+commands[zoxide] ]]; then
+	eval "$(zoxide init zsh --cmd cd)"
+fi
 
-autoload -U promptinit; promptinit
-prompt pure
+zinit ice lucid wait blockf
+zinit light zsh-users/zsh-completions
+
+zinit ice lucid wait
+zinit light Aloxaf/fzf-tab
+
+zinit ice lucid wait'1'
+zinit light zsh-users/zsh-autosuggestions
+
+# Load prompt
+zinit ice pick"async.zsh" src"pure.zsh"
+zinit light sindresorhus/pure
 
 
 # ----------------------------------------------------------------
-# 			     Homebrew
+# 		       Additional config
 # ----------------------------------------------------------------
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-
-# ----------------------------------------------------------------
-# 			   Local Aliases
-# ----------------------------------------------------------------
-
-source $DOTFILES/zsh/zsh-includes/user-aliases.zsh
+# Completion Styling
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+zstyle ':completion:*' menu no
 
 
 # ----------------------------------------------------------------
 # 			     Aliases
 # ----------------------------------------------------------------
 
-alias v="nvim"
-
 alias c="clear"
 alias e="exit"
-
-alias home="cd $HOME"
-alias dot="cd $DOTFILES"
-alias cb="cd $CODEBASE"
 
 alias ls="ls --color"
 alias la="ls -lahtr"
@@ -83,71 +93,11 @@ alias tnew="tmux new -s main"
 alias tatt="tmux attach -t main"
 alias tkill="tmux kill-session -t main"
 
-alias gp="git pull"
-alias gs="git status"
-
-alias refresh="sudo dnf update --refresh"
-
 
 # ----------------------------------------------------------------
 # 			    Key Binds
 # ----------------------------------------------------------------
 
-bindkey -d
 bindkey '^K' up-line-or-history
 bindkey '^J' down-line-or-history   
 bindkey '^F' autosuggest-accept
-
-
-# ----------------------------------------------------------------
-# 			   Completion
-# ----------------------------------------------------------------
-
-# Install Missing Packages
-if [ ! rpm -q fzf > /dev/null 2>&1 ]; then
-	echo "'fzf' not found. Installing..."
-	yes | sudo dnf install -y fzf
-fi
-
-
-if [ ! rpm -q zoxide > /dev/null 2>&1 ]; then
-	echo "'zoxide' not found. Installing..."
-	yes | sudo dnf install -y zoxide
-fi
-
-# fzf & zoxide
-eval "$(fzf --zsh)"
-eval "$(zoxide init --cmd cd zsh)"
-
-# fzf-tab
-if [ ! -d "$PLUGINS/fzf-tab" ]; then
-	echo "'fzf-tab' not found. Installing..."
-
-	git clone https://github.com/Aloxaf/fzf-tab $PLUGINS/fzf-tab/
-fi
-
-# zsh-completions
-if [ ! -d "$PLUGINS/zsh-completions" ]; then
-	echo "'zsh-completions' not found. Installing..."
-
-	git clone https://github.com/zsh-users/zsh-completions.git $PLUGINS/zsh-completions/
-fi
-
-fpath+=($PLUGINS/zsh-completions/src)
-
-# zsh-autosuggestions
-brew ls --versions zsh-autosuggestions || brew install zsh-autosuggestions
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# Completion Initialization
-autoload -U compinit; compinit
-source $PLUGINS/fzf-tab/fzf-tab.plugin.zsh
-
-# Completion Styling
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*' menu no
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
-
-clear;
