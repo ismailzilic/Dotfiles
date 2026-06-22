@@ -18,16 +18,15 @@ dap.adapters.lldb = {
 -- DAP Config for C, C++
 dap.configurations.cpp = {
 	{
-		name = "Launch C++ program",
+		name = "Launch",
 		type = "lldb",
 		request = "launch",
 		program = function()
-			return vim.fn.input("Path to executable: ", "./", "file")
+			return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
 		end,
 		cwd = "${workspaceFolder}",
 		stopOnEntry = false,
-		externalConsole = true,
-		runInTerminal = true,
+		args = {},
 	}
 }
 
@@ -51,9 +50,9 @@ end
 vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "Continue" })
 vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle breakpoint" })
 vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "Step into" })
-vim.keymap.set("n", "<leader>ds", dap.step_over, { desc = "Step over" })
-vim.keymap.set("n", "<leader>ds", dap.step_out, { desc = "Step out" })
-vim.keymap.set("n", "<leader>db", dap.step_back, { desc = "Step back" })
+vim.keymap.set("n", "<leader>do", dap.step_over, { desc = "Step over" })
+vim.keymap.set("n", "<leader>dn", dap.step_out, { desc = "Step out" })
+vim.keymap.set("n", "<leader>dm", dap.step_back, { desc = "Step back" })
 vim.keymap.set("n", "<leader>drr", dap.restart, { desc = "Restart debugging" })
 
 vim.keymap.set("n", "<leader>?", function()
