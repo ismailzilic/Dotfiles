@@ -1,20 +1,25 @@
-require("core.options")
-require("core.keymaps")
-require("core.color-themes")
+vim.g.mapleader = " "
 
-require("plugins.lsp.lspconfig")
-require("plugins.lsp.mason")
+require("keymaps")
+require("options")
+require("autocmds")
 
-require("plugins.autopairs")
-require("plugins.blink")
-require("plugins.bufferline")
-require("plugins.dap")
-require("plugins.explorer")
-require("plugins.nvim-colorizer")
-require("plugins.nvim-surround")
-require("plugins.smear-cursor")
-require("plugins.status-line")
-require("plugins.telescope")
-require("plugins.treesitter")
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  	vim.fn.system({
+    		"git",
+    		"clone",
+    		"--filter=blob:none",
+    		"https://github.com/folke/lazy.nvim.git",
+    		"--branch=stable",
+    		lazypath,
+  	})
+end
+vim.opt.rtp:prepend(lazypath)
 
-vim.cmd(":colorscheme koda")
+vim.opt.termguicolors = true
+
+require("lazy").setup({
+  	{ import = "plugins" },
+})
+
